@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const express = require('express')
 const app = express()
 
-app.use(require('./controllers/usuarios'))
+//Configuración global de rutas
+app.use(require('./controllers/index'))
 
 mongoose.connect(process.env.URLDB, (error, resp) => {
 
