@@ -2,10 +2,12 @@ require('./config/config')
 
 const mongoose = require('mongoose');
 const express = require('express')
-const app = express()
+const app = express();
+const path = require('path');
 
 //Configuración global de rutas
-app.use(require('./controllers/index'))
+app.use(require('./controllers/index'));
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 mongoose.connect(process.env.URLDB, (error, resp) => {
 
