@@ -11,7 +11,7 @@ let rolesValid = {
 
 //Definimos el schema de la colección(tabla) Usuario de MongoDB 
 let usuarioSchema = new Schema({
-    nombre: {
+    name: {
         type: String,
         required: [true, 'El nombre de usuario es obligatorio.']
     },
@@ -33,7 +33,7 @@ let usuarioSchema = new Schema({
         default: 'USER_ROLE',
         enum: rolesValid
     },
-    estatus: {
+    status: {
         type: Boolean,
         default: true
     },

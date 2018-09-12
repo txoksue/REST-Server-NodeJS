@@ -39,12 +39,12 @@ app.post('/login', (req, resp) => {
 
         //Creación del token que expira en 30 dias
         let token = jwt.sign({
-            user: userDB
-        }, 'seed-dev', { expiresIn: process.env.TOKEN_EXPIRATION });
+            usuario: userDB
+        }, process.env.TOKEN_SEED, { expiresIn: process.env.TOKEN_EXPIRATION });
 
         resp.json({
             ok: true,
-            user: userDB,
+            usuario: userDB,
             token
         })
 

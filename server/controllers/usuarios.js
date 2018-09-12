@@ -4,6 +4,7 @@ const _ = require('underscore');
 const app = express()
 const bodyParser = require('body-parser')
 const Usuario = require('../models/usuario')
+const { checkToken, checkRole } = require('../middlewares/authentication')
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -11,13 +12,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.get('/usuario', function(req, res) {
+app.get('/usuario', checkToken, (req, res) => {
 
-    //Params opcionales
+    //Params opcionales ?param1=1&param2=2
     let from = req.query.from || 0;
     let limit = req.query.limit || 5;
 
-    Usuario.find({ estatus: true /*opciones de filtro tal como google:true o estatus: false */ }, 'nombre email role estatus img google' /* Solo muestra los campsos que detallemos aqui*/ )
+    Usuario.find({ status: true /*opciones de filtro tal como google:true o estatus: false */ }, 'nombre email role estatus img google' /* Solo muestra los campsos que detallemos aqui*/ )
         .skip(Number(from))
         .limit(Number(limit))
         .exec((error, usuarios) => {
@@ -29,7 +30,7 @@ app.get('/usuario', function(req, res) {
                 })
             }
 
-            Usuario.count({ estatus: true /*opciones de filtro tal como google:true o estatus: false */ }, (error, count) => {
+            Usuario.count({ status: true /*opciones de filtro tal como google:true o estatus: false */ }, (error, count) => {
 
                 res.json({
                     ok: true,
@@ -41,11 +42,11 @@ app.get('/usuario', function(req, res) {
         })
 })
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [checkToken, checkRole], (req, res) => {
 
     let body = req.body;
     let usuario = new Usuario({
-        nombre: body.nombre,
+        name: body.name,
         email: body.email,
         password: bcrypt.hashSync(body.password, 10),
         role: body.role
@@ -69,11 +70,11 @@ app.post('/usuario', function(req, res) {
     })
 })
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [checkToken, checkRole], (req, res) => {
 
     let id = req.params.id;
     //Utilizamos underscore para coger del objeto del body solo los campos que podemos actualizar en la peticion PUT
-    let body = _.pick(req.body, ['nombre', 'email', 'img', 'estatus', 'role']);
+    let body = _.pick(req.body, ['name', 'email', 'img', 'status', 'role']);
 
     Usuario.findOneAndUpdate(id, body, { new: true, runValidators: true }, (error, usuarioDB) => {
 
@@ -91,7 +92,7 @@ app.put('/usuario/:id', function(req, res) {
     })
 })
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [checkToken, checkRole], (req, res) => {
 
     let id = req.params.id;
     //Borrado fisico del registro
@@ -118,7 +119,7 @@ app.delete('/usuario/:id', function(req, res) {
     // })
 
     //Borrado lógico de un usuario
-    Usuario.findByIdAndUpdate(id, { estatus: false }, (error, usuarioDB) => {
+    Usuario.findByIdAndUpdate(id, { status: false }, (error, usuarioDB) => {
 
         if (error) {
             return res.status(400).json({
