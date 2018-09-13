@@ -33,7 +33,7 @@ process.env.URLDB = urlDB;
 //24 Horas
 //30 Dias
 
-process.env.TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
+process.env.TOKEN_EXPIRATION = '48h';
 
 
 // =========================

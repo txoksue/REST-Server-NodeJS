@@ -44,7 +44,7 @@ let usuarioSchema = new Schema({
     }
 });
 
-//Para no devolver el campo password. El método toJSON siempre se llama cuando queremos devolver el objeto Usuairo
+//Para no devolver el campo password. El método toJSON siempre se llama cuando queremos devolver el objeto Usuario
 //Nunca se usa una funcion de flecha.
 usuarioSchema.methods.toJSON = function() {
 

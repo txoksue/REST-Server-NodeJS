@@ -1,8 +1,8 @@
 const express = require('express')
-const bcrypt = require('bcrypt');
-const _ = require('underscore');
 const app = express()
 const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt');
+const _ = require('underscore');
 const Usuario = require('../models/usuario')
 const { checkToken, checkRole } = require('../middlewares/authentication')
 
@@ -18,6 +18,7 @@ app.get('/usuario', checkToken, (req, res) => {
     let from = req.query.from || 0;
     let limit = req.query.limit || 5;
 
+    //Devuelve todos con los que tengan status = true
     Usuario.find({ status: true /*opciones de filtro tal como google:true o estatus: false */ }, 'nombre email role estatus img google' /* Solo muestra los campsos que detallemos aqui*/ )
         .skip(Number(from))
         .limit(Number(limit))
