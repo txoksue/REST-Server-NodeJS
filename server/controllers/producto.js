@@ -157,7 +157,6 @@ app.put('/producto/:id', checkToken, (req, resp) => {
             ok: true,
             producto
         })
-
     });
 
 })
